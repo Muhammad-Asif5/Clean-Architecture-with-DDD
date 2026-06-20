@@ -12,5 +12,6 @@ namespace YourApp.Domain.Interfaces
         int Take { get; }
         int Skip { get; }
         bool IsPagingEnabled { get; }
+        bool IsCountQuery { get; } // ✅ New property to indicate count query
     }
 }

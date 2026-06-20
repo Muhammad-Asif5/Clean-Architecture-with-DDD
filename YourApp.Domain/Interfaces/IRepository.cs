@@ -7,6 +7,7 @@ namespace YourApp.Domain.Interfaces
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> GetAllAsync();
         Task<IReadOnlyList<T>> GetAsync(ISpecification<T> spec);
+        Task<int> CountAsync(ISpecification<T> spec); // ✅ Add this for pagination
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);

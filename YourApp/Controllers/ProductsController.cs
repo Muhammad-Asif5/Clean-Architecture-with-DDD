@@ -26,22 +26,22 @@ namespace YourApp.API.Controllers
 
         [HttpGet]
         [Authorize(Policy = ProductPermission.CanRead)]
-        [ProducesResponseType(typeof(ApiResponse<List<ProductDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PagedResult<ProductDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Get([FromQuery] GetProductsQuery query)
         {
             var profile = GetProfile();
-            _logger.LogInformation("User {UserId} requested products", profile?.UserId);
+            _logger.LogInformation("User {UserId} requested products with pagination", profile?.UserId);
 
             var result = await _mediator.Send(query);
 
-            if (result == null || !result.Any())
+            if (result == null || !result.Items.Any())
             {
-                return Ok(ApiResponse<List<ProductDto>>.NoContentResponse());
+                return Ok(ApiResponse<PagedResult<ProductDto>>.NoContentResponse());
             }
 
-            return Ok(ApiResponse<List<ProductDto>>.SuccessResponse(result));
+            return Ok(ApiResponse<PagedResult<ProductDto>>.SuccessResponse(result));
         }
 
         [HttpPost]

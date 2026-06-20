@@ -31,6 +31,19 @@ namespace YourApp.Infrastructure.Repositories
             return await ApplySpecification(spec).ToListAsync();
         }
 
+        // ✅ New method for counting items
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            var query = _dbSet.AsQueryable();
+
+            if (spec.Criteria != null)
+            {
+                query = query.Where(spec.Criteria);
+            }
+
+            return await query.CountAsync();
+        }
+
         public async Task<T> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);

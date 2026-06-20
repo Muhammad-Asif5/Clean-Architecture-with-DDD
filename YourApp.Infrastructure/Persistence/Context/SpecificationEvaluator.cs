@@ -14,12 +14,20 @@ namespace YourApp.Infrastructure.Persistence.Context
                 query = query.Where(specification.Criteria);
             }
 
+            // ✅ For count queries, skip includes, ordering, and paging
+            if (specification.IsCountQuery)
+            {
+                return query;
+            }
+
+            // Includes
             query = specification.Includes.Aggregate(query,
                 (current, include) => current.Include(include));
 
             query = specification.IncludeStrings.Aggregate(query,
                 (current, include) => current.Include(include));
 
+            // Ordering
             if (specification.OrderBy != null)
             {
                 query = query.OrderBy(specification.OrderBy);
@@ -29,6 +37,7 @@ namespace YourApp.Infrastructure.Persistence.Context
                 query = query.OrderByDescending(specification.OrderByDescending);
             }
 
+            // Paging
             if (specification.IsPagingEnabled)
             {
                 query = query.Skip(specification.Skip)
